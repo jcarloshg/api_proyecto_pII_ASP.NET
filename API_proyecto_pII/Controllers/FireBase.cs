@@ -7,6 +7,7 @@ using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
 using Newtonsoft.Json;
+using API_proyecto_pII.Models;
 
 namespace API_proyecto_pII.Controllers
 {
@@ -38,6 +39,18 @@ namespace API_proyecto_pII.Controllers
         {
             IFirebaseClient cliente = init();
             return cliente.Set(url, data);
+        }
+
+        public static SetResponse setUserInfo(string url, UserInfo user)
+        {
+            IFirebaseClient cliente = init();
+            return cliente.Set(url, user);
+        }
+
+        public static FirebaseResponse update(string url, UserInfo user)
+        {
+            IFirebaseClient cliente = init();
+            return cliente.Update(url, user);
         }
 
         public static FirebaseResponse delete(string url)

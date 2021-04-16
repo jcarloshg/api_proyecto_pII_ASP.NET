@@ -7,7 +7,7 @@ using System.Web;
 
 namespace API_proyecto_pII.Models
 {
-    internal class UserInfo
+    public class UserInfo
     {
         public string Correo { get; set; }
         public string Nombre { get; set; }

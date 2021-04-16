@@ -63,7 +63,7 @@ namespace API_proyecto_pII.Controllers
 
         public IHttpActionResult Post(string user, string pass, string newUser, string newPass)
         {
-            string code = loginAndCheckPermission(user, pass, new string[] {"ventas", "almacen"}, "404");
+            string code = loginAndCheckPermission(user, pass, new string[] { "rh" }, "404");
             string data = "";
             string status = "Error";
 
@@ -74,7 +74,7 @@ namespace API_proyecto_pII.Controllers
                 // check existence of new user
                 if (newUserPass.Equals("ul"))
                 {
-                    FireBase.set("usuarios/" + newUser, newPass);
+                    FireBase.set("usuarios/" + newUser, GetMD5(newPass));
                     data = DateTime.Now.ToString("yyy/MM/dd HH:mm:ss");
                     status = "Successfully";
                 }
@@ -124,7 +124,7 @@ namespace API_proyecto_pII.Controllers
                     if (code == "401")
                     {
                         FireBase.delete("usuarios/" + oldUser);
-                        FireBase.set("usuarios/" + newUser, newPass);
+                        FireBase.set("usuarios/" + newUser, GetMD5(newPass));
                         data = DateTime.Now.ToString("yyy/MM/dd HH:mm:ss");
                         status = "Successfully";
                     }
