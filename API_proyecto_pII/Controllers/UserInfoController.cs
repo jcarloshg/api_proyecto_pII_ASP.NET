@@ -178,16 +178,21 @@ namespace API_proyecto_pII.Controllers
         public IHttpActionResult Get()
         {
             string code = "999";
-            string message = "";
-            string status = "error";
+            string status = "Error";
 
             var response = FireBase.get("usuarios_info", "");
             Dictionary<string, UserInfo> users = response.ResultAs<Dictionary<string, UserInfo>>();
 
+            if (users.Count > 0)
+            {
+                code = "602";
+                status = "Succes";
+            }
+
             RespuestaGetUsersInfo res = new RespuestaGetUsersInfo
             {
                 Code = code,
-                Message = message,
+                Message = QuitarComillas(FireBase.getBody("respuestas/", code)),
                 Data = users,
                 Status = status
             };
