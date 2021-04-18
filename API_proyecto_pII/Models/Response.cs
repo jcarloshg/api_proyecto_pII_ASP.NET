@@ -53,6 +53,14 @@ namespace API_proyecto_pII.Models
         public string Status { get; set; }
     }
 
+    internal class RespuestaLogin
+    {
+        public string Code { get; set; }
+        public string Message { get; set; }
+        public UserInfo Data { get; set; }
+        public string Status { get; set; }
+    }
+
     internal class ResPass
     {
         public string pass { get; set; }

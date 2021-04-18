@@ -200,11 +200,43 @@ namespace API_proyecto_pII.Controllers
             return Ok(res);
         }
 
-        // GET: api/UserInfo/pruebas1
-        public IHttpActionResult Get(string user)
+        // GET: api/UserInfo/pruebas1/12345678a
+        public IHttpActionResult Get(string user, string pass)
         {
-            UserInfo userInfo = FireBase.get("usuarios_info/", user).ResultAs<UserInfo>();
-            return Ok(userInfo);
+            UserInfo data = new UserInfo();
+            string status = "Error";
+
+            string user_res = FireBase.getBody("usuarios/", user);
+            string code = "500"; // Usuario no reconocido
+
+            if (!user_res.Equals("null"))
+            {
+                string pass_bd = QuitarComillas(user_res);
+                code = "501"; // Password no reconcido
+
+                if (pass_bd.Equals(GetMD5(pass)))
+                {
+                    UserInfo userInfo = FireBase.get("usuarios_info/", user).ResultAs<UserInfo>();
+                    code = "509"; // Sin permiso
+
+                    if (userInfo.Rol.Equals("rh"))
+                    {
+                        code = "602";
+                        status = "Succes";
+                        data = userInfo;
+                    }
+                }
+            }
+
+            RespuestaLogin res = new RespuestaLogin
+            {
+                Code = code,
+                Message = QuitarComillas(FireBase.getBody("respuestas/", code)),
+                Data = data,
+                Status = status
+            };
+
+            return Ok(res);
         }
 
         // POST: api/UserInfo
@@ -297,11 +329,6 @@ namespace API_proyecto_pII.Controllers
             };
 
             return Ok(res);
-        }
-
-        // DELETE: api/UserInfo/5
-        public void Delete(int id)
-        {
         }
     }
 }
