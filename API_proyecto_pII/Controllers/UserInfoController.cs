@@ -248,10 +248,11 @@ namespace API_proyecto_pII.Controllers
 
             if (code.Equals("null"))
             {
-                string user_exist = FireBase.getBody("usuarios_info/", searchedUser);
+                // string user_exist = FireBase.getBody("usuarios/", searchedUser);
+                string userInfoExist = FireBase.getBody("usuarios_info/", searchedUser);
                 code = "506";
 
-                if (user_exist.Equals("null"))
+                if (userInfoExist.Equals("null"))
                 {
                     code = "305";
 

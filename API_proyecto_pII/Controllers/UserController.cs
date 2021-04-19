@@ -69,18 +69,30 @@ namespace API_proyecto_pII.Controllers
 
             if (code == "404")
             {
-                string newUserPass = QuitarComillas(FireBase.getBody("usuarios/", newUser));
+                // check newpass that contains
+                if (newPass.Length < 8 || newPass != newPass.Replace(" ", "") || !newPass.Any(char.IsDigit))
+                { code = "502"; }
 
-                // check existence of new user
-                if (newUserPass.Equals("ul"))
+                // checo string newUser
+                if (code == "404")
+                    if (!newUser.All(char.IsLetterOrDigit) || newUser != newUser.Replace(" ", ""))
+                        code = "503";
+
+                if (code == "404")
                 {
-                    FireBase.set("usuarios/" + newUser, GetMD5(newPass));
-                    data = DateTime.Now.ToString("yyy/MM/dd HH:mm:ss");
-                    status = "Successfully";
-                }
-                else
-                {
-                    code = "508";
+                    string newUserPass = QuitarComillas(FireBase.getBody("usuarios/", newUser));
+
+                    // check existence of new user
+                    if (newUserPass.Equals("ul"))
+                    {
+                        FireBase.set("usuarios/" + newUser, GetMD5(newPass));
+                        data = DateTime.Now.ToString("s");
+                        status = "Successfully";
+                    }
+                    else
+                    {
+                        code = "508";
+                    }
                 }
             }
 
@@ -110,7 +122,7 @@ namespace API_proyecto_pII.Controllers
 
                 // checo string newUser
                 if (code == "401")
-                    if ( !newUser.All(char.IsLetterOrDigit) || newPass != newPass.Replace(" ", "") )
+                    if ( !newUser.All(char.IsLetterOrDigit) || newUser != newUser.Replace(" ", "") )
                         code = "503";
 
                 // check the existence oldUser
@@ -125,7 +137,7 @@ namespace API_proyecto_pII.Controllers
                     {
                         FireBase.delete("usuarios/" + oldUser);
                         FireBase.set("usuarios/" + newUser, GetMD5(newPass));
-                        data = DateTime.Now.ToString("yyy/MM/dd HH:mm:ss");
+                        data = DateTime.Now.ToString("s");
                         status = "Successfully";
                     }
                 }
